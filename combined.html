@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voting System Home</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Welcome to the Voting System</h1>
+    <a href="/register">Register</a> |
+    <a href="/login">Login</a> |
+    <a href="/vote">Vote</a> |
+    <a href="/results">Results</a> |
+    <a href="https://www.example.com" target="_blank">WWW</a>
+    <ul>
+        <li>This is the index page. Use the navigation links above.</li>
+    </ul>
+    <!-- Home Section -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Login Section -->
+    <h2>Login</h2>
+    <form method="post" action="/login">
+        Username: <input type="text" name="username" required><br>
+        Password: <input type="password" name="password" required><br>
+        <input type="submit" value="Login">
+    </form>
+    <a href="/register">Don't have an account? Register</a>
+
+    <!-- Vote Section -->
+    <h2>Vote</h2>
+    {% if user and user.has_voted %}
+        <p>You have already voted.</p>
+    {% else %}
+    <form method="post" action="/vote">
+        {% for party in parties %}
+            <input type="radio" name="party" value="{{ party }}" required> {{ party }}<br>
+        {% endfor %}
+        <input type="submit" value="Vote">
+    </form>
+    {% endif %}
+    <a href="/results">View Results</a>
+
+    <!-- Results Section -->
+    <h2>Voting Results</h2>
+    <ul>
+    {% for party, votes in results.items() %}
+        <li>{{ party }}: {{ votes }} Votes</li>
+    {% endfor %}
+    </ul>
+    <a href="/">Home</a>
+</body>
+</html>
